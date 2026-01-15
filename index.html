@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AestheticGen // Palette & Font Pairings</title>
+    <!-- UI Chrome Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* UI Theme - Light (Default) */
+            --bg-app: #f9fafb;
+            --bg-card: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            
+            /* UI Transition */
+            --ts: 0.2s ease-in-out;
+        }
+
+        .theme-dark {
+            --bg-app: #121212;
+            --bg-card: #1e1e1e;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border: #374151;
+            --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+        }
+
+        /* Base Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            transition: background-color var(--ts), color var(--ts);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Inter', sans-serif; font-weight: 700; }
+
+        /* App Layout */
+        header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+
+        .logo { font-size: 1.25rem; letter-spacing: -0.025em; display: flex; align-items: center; gap: 0.5rem; }
+        .logo span { color: var(--accent); }
+
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            main { grid-template-columns: 1fr; }
+        }
+
+        /* Controls Section */
+        .toolbar {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            appearance: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--ts);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 0.875rem;
+        }
+
+        button:hover { border-color: var(--accent); color: var(--accent); }
+        button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        button.primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+        }
+        button.primary:hover { background: var(--accent-hover); color: white; transform: translateY(-1px); }
+
+        /* Preview Card */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        /* The Live Preview Container */
+        #preview-container {
+            padding: 3rem;
+            border-radius: 0.75rem;
+            background: #ffffff; /* Always neutral */
+            border: 1px solid var(--border);
+            color: #111827;
+            transition: all 0.3s ease;
+        }
+        .theme-dark #preview-container { background: #1a1a1a; color: #f3f4f6; }
+
+        #preview-h1 { font-size: 3rem; margin-bottom: 1rem; line-height: 1.1; }
+        #preview-p { font-size: 1.125rem; max-width: 60ch; margin-bottom: 2rem; opacity: 0.9; }
+        #preview-btn { padding: 0.8rem 2rem; border-radius: 9999px; border: none; font-weight: 700; cursor: default; }
+
+        /* Palette Swatches */
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .swatch {
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .swatch:hover { transform: translateY(-4px); }
+        .swatch-color { height: 80px; width: 100%; position: relative; }
+        .swatch-info { padding: 0.75rem; background: var(--bg-card); font-size: 0.75rem; }
+        .swatch-hex { font-family: monospace; font-weight: bold; display: block; margin-bottom: 0.25rem; }
+        
+        .contrast-badges { display: flex; gap: 0.4rem; }
+        .badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 800;
+        }
+        .badge.pass { background: #dcfce7; color: #166534; }
+        .badge.fail { background: #fee2e2; color: #991b1b; }
+
+        /* Favorites Sidebar */
+        .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+        .fav-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+        .fav-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            position: relative;
+        }
+        .fav-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .fav-fonts { font-size: 0.8rem; font-weight: 600; }
+        .fav-colors { display: flex; height: 12px; border-radius: 6px; overflow: hidden; }
+        .fav-color-bar { flex: 1; }
+        .fav-actions { display: flex; gap: 0.5rem; margin-top: 0.25rem; }
+        .btn-icon { padding: 0.4rem; min-width: 32px; justify-content: center; }
+
+        /* Toast Notification */
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #111827;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+        }
+        #toast.visible { transform: translateX(-50%) translateY(0); }
+
+        footer {
+            padding: 1.5rem 2rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+
+        kbd {
+            background: var(--bg-app);
+            border: 1px solid var(--border);
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-weight: bold;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; animation: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            Aesthetic<span>Gen</span>
+        </div>
+        <button id="theme-toggle" aria-label="Toggle Dark Mode">
+            <svg id="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+            <span id="theme-text">Dark Mode</span>
+        </button>
+    </header>
+
+    <main>
+        <section class="content">
+            <div class="toolbar">
+                <button id="shuffle-btn" class="primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18 6 14"/><path d="m2 6 8 8"/><path d="m22 22-1.5-1.5"/><path d="m22 2-1.5 1.5"/><path d="M9 22 2 15"/><path d="m20 22-8-8"/><path d="M18 2h4v4"/><path d="M22 22h-4v-4"/><path d="m14 6 4-4"/><path d="M15 2 2 15"/></svg>
+                    Shuffle <span style="opacity: 0.7; font-size: 0.7rem; margin-left: 4px;">[Space]</span>
+                </button>
+                <button id="save-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    Save Combination
+                </button>
+                <button id="export-css-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    Copy CSS
+                </button>
+                <button id="export-json-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    JSON
+                </button>
+            </div>
+
+            <div class="card">
+                <span class="section-title">Live Typography Preview</span>
+                <div id="preview-container">
+                    <h1 id="preview-h1">The art of visual harmony.</h1>
+                    <p id="preview-p">Generating curated aesthetics using modern design principles. This tool pairs high-quality typography with accessible color palettes to jumpstart your next project's visual identity.</p>
+                    <button id="preview-btn">Action Button</button>
+                </div>
+                <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <p id="font-info-heading" style="font-size: 0.875rem; font-weight: 700;">Heading: Inter</p>
+                        <p id="font-info-body" style="font-size: 0.75rem; color: var(--text-muted);">Body: Source Sans 3</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="section-title">Generated Palette</span>
+                <div id="palette-grid" class="palette-grid">
+                    <!-- Swatches injected here -->
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.7rem; color: var(--text-muted);">Click a swatch to copy HEX code. Contrast badges indicate WCAG AA accessibility for normal text.</p>
+            </div>
+        </section>
+
+        <aside class="sidebar">
+            <div class="card" style="margin-bottom: 0;">
+                <span class="section-title">Saved Library</span>
+                <ul id="fav-list" class="fav-list">
+                    <!-- Favorites injected here -->
+                </ul>
+                <div id="no-favs" style="text-align: center; padding: 2rem 0; color: var(--text-muted); font-size: 0.875rem;">
+                    No saved aesthetics yet.
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <div id="toast" role="status">Copied to clipboard!</div>
+
+    <footer>
+        Press <kbd>Space</kbd> to Shuffle • <kbd>S</kbd> to Save • <kbd>C</kbd> to Copy CSS • Designed for Excellence.
+    </footer>
+
+    <script>
+        /**
+         * AESTHETIC GENERATOR CORE
+         */
+
+        const STATE = {
+            current: {
+                palette: [],
+                fonts: { heading: '', body: '' }
+            },
+            favorites: JSON.parse(localStorage.getItem('aesthetic.favorites')) || [],
+            theme: localStorage.getItem('aesthetic.theme') || 'light'
+        };
+
+        const FONT_OPTIONS = [
+            { heading: 'Playfair Display', body: 'Source Sans 3' },
+            { heading: 'Montserrat', body: 'Open Sans' },
+            { heading: 'Fraunces', body: 'Inter' },
+            { heading: 'Oswald', body: 'Roboto' },
+            { heading: 'Lora', body: 'Merriweather' },
+            { heading: 'Poppins', body: 'Lato' },
+            { heading: 'Syne', body: 'Work Sans' },
+            { heading: 'Space Grotesk', body: 'Space Mono' },
+            { heading: 'Archivo Black', body: 'Archivo' },
+            { heading: 'Cormorant Garamond', body: 'Proza Libre' },
+            { heading: 'Bebas Neue', body: 'Libre Franklin' },
+            { heading: 'Lexend', body: 'Outfit' },
+            { heading: 'Cabinet Grotesk', body: 'Satoshi' }, // Hypothetical, using Google equivalents below
+            { heading: 'Plus Jakarta Sans', body: 'IBM Plex Sans' },
+            { heading: 'Clash Display', body: 'General Sans' }
+        ];
+
+        const CURATED_PALETTES = [
+            { name: 'Minimal', colors: ['#000000', '#FFFFFF', '#F3F4F6', '#6366F1', '#111827'] },
+            { name: 'Playful', colors: ['#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF', '#F9F9F9'] },
+            { name: 'Bold', colors: ['#0F172A', '#334155', '#F59E0B', '#EF4444', '#F8FAFC'] },
+            { name: 'Midnight', colors: ['#1E293B', '#334155', '#71717a', '#38bdf8', '#f8fafc'] },
+            { name: 'Forest', colors: ['#064e3b', '#065f46', '#059669', '#34d399', '#ecfdf5'] }
+        ];
+
+        // --- UTILITIES ---
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('visible');
+            setTimeout(() => t.classList.remove('visible'), 2000);
+        }
+
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast("Copied to clipboard!");
+            } catch (err) {
+                // Fallback for older browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast("Copied to clipboard!");
+            }
+        }
+
+        function hexToRgb(hex) {
+            if (!hex) return null;
+            
+            // Handle rgb(r, g, b) strings if browsers return them from DOM
+            if (hex.startsWith('rgb')) {
+                const parts = hex.match(/\d+/g);
+                if (parts && parts.length >= 3) {
+                    return { r: parseInt(parts[0]), g: parseInt(parts[1]), b: parseInt(parts[2]) };
+                }
+            }
+
+            const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function getLuminance(hex) {
+            const rgb = hexToRgb(hex);
+            if (!rgb) return 0; // Guard against null values
+            
+            const a = [rgb.r, rgb.g, rgb.b].map(v => {
+                v /= 255;
+                return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+            });
+            return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+        }
+
+        function getContrastRatio(hex1, hex2) {
+            const l1 = getLuminance(hex1) + 0.05;
+            const l2 = getLuminance(hex2) + 0.05;
+            return Math.max(l1, l2) / Math.min(l1, l2);
+        }
+
+        // --- CORE LOGIC ---
+
+        function generateRandomPalette() {
+            // Mix of curated seeds and procedural random
+            if (Math.random() > 0.4) {
+                return CURATED_PALETTES[Math.floor(Math.random() * CURATED_PALETTES.length)].colors;
+            }
+
+            const baseHue = Math.floor(Math.random() * 360);
+            return [
+                `hsl(${baseHue}, 70%, 15%)`,
+                `hsl(${baseHue}, 20%, 40%)`,
+                `hsl(${(baseHue + 180) % 360}, 60%, 50%)`,
+                `hsl(${baseHue}, 10%, 90%)`,
+                `hsl(${(baseHue + 30) % 360}, 80%, 60%)`
+            ].map(hslToHex);
+        }
+
+        function hslToHex(hsl) {
+            let [h, s, l] = hsl.match(/\d+/g).map(Number);
+            l /= 100;
+            const a = s * Math.min(l, 1 - l) / 100;
+            const f = n => {
+                const k = (n + h / 30) % 12;
+                const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                return Math.round(255 * color).toString(16).padStart(2, '0');
+            };
+            return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
+        }
+
+        function loadGoogleFont(font) {
+            if (!font) return;
+            const id = `font-link-${font.replace(/\s+/g, '-').toLowerCase()}`;
+            if (document.getElementById(id)) return;
+            
+            const link = document.createElement('link');
+            link.id = id;
+            link.rel = 'stylesheet';
+            link.href = `https://fonts.googleapis.com/css2?family=${font.replace(/\s+/g, '+')}:wght@400;700&display=swap`;
+            document.head.appendChild(link);
+        }
+
+        function applyAesthetic(aesthetic) {
+            STATE.current = aesthetic;
+            
+            // Apply Fonts
+            loadGoogleFont(aesthetic.fonts.heading);
+            loadGoogleFont(aesthetic.fonts.body);
+            
+            const preview = document.getElementById('preview-container');
+            const h1 = document.getElementById('preview-h1');
+            const p = document.getElementById('preview-p');
+            const btn = document.getElementById('preview-btn');
+
+            h1.style.fontFamily = `'${aesthetic.fonts.heading}', sans-serif`;
+            p.style.fontFamily = `'${aesthetic.fonts.body}', sans-serif`;
+            btn.style.fontFamily = `'${aesthetic.fonts.body}', sans-serif`;
+
+            // Apply Colors to Preview
+            // Use hex values directly from state instead of reading from DOM style (which returns rgb())
+            const accentColor = aesthetic.palette[3] || aesthetic.palette[0];
+            btn.style.backgroundColor = accentColor;
+            btn.style.color = getContrastRatio(accentColor, '#ffffff') > 4.5 ? '#ffffff' : '#000000';
+            
+            document.getElementById('font-info-heading').textContent = `Heading: ${aesthetic.fonts.heading}`;
+            document.getElementById('font-info-body').textContent = `Body: ${aesthetic.fonts.body}`;
+
+            // Render Palette Swatches
+            renderPaletteUI();
+        }
+
+        function renderPaletteUI() {
+            const grid = document.getElementById('palette-grid');
+            grid.innerHTML = '';
+            
+            STATE.current.palette.forEach(color => {
+                const swatch = document.createElement('div');
+                swatch.className = 'swatch';
+                swatch.onclick = () => copyToClipboard(color);
+                
+                const contrastW = getContrastRatio(color, '#ffffff').toFixed(1);
+                const contrastB = getContrastRatio(color, '#000000').toFixed(1);
+
+                swatch.innerHTML = `
+                    <div class="swatch-color" style="background-color: ${color}"></div>
+                    <div class="swatch-info">
+                        <span class="swatch-hex">${color}</span>
+                        <div class="contrast-badges">
+                            <span class="badge ${contrastW >= 4.5 ? 'pass' : 'fail'}" title="Contrast vs White">W: ${contrastW}</span>
+                            <span class="badge ${contrastB >= 4.5 ? 'pass' : 'fail'}" title="Contrast vs Black">B: ${contrastB}</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(swatch);
+            });
+        }
+
+        function shuffle() {
+            const fontPair = FONT_OPTIONS[Math.floor(Math.random() * FONT_OPTIONS.length)];
+            const palette = generateRandomPalette();
+            applyAesthetic({
+                fonts: fontPair,
+                palette: palette
+            });
+        }
+
+        // --- STORAGE & FAVORITES ---
+
+        function saveCurrent() {
+            const id = Date.now();
+            const aesthetic = JSON.parse(JSON.stringify(STATE.current));
+            aesthetic.id = id;
+            
+            STATE.favorites.unshift(aesthetic);
+            localStorage.setItem('aesthetic.favorites', JSON.stringify(STATE.favorites));
+            renderFavoritesUI();
+            showToast("Saved to library!");
+        }
+
+        function deleteFavorite(id) {
+            STATE.favorites = STATE.favorites.filter(f => f.id !== id);
+            localStorage.setItem('aesthetic.favorites', JSON.stringify(STATE.favorites));
+            renderFavoritesUI();
+        }
+
+        function renderFavoritesUI() {
+            const list = document.getElementById('fav-list');
+            const noFavs = document.getElementById('no-favs');
+            list.innerHTML = '';
+            
+            if (STATE.favorites.length === 0) {
+                noFavs.style.display = 'block';
+                return;
+            }
+            noFavs.style.display = 'none';
+
+            STATE.favorites.forEach(fav => {
+                const item = document.createElement('li');
+                item.className = 'fav-item';
+                
+                const colorBar = fav.palette.map(c => `<div class="fav-color-bar" style="background:${c}"></div>`).join('');
+                
+                item.innerHTML = `
+                    <div class="fav-header">
+                        <div class="fav-fonts">${fav.fonts.heading} / ${fav.fonts.body}</div>
+                        <button class="btn-icon delete-fav" aria-label="Delete">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                        </button>
+                    </div>
+                    <div class="fav-colors">${colorBar}</div>
+                    <div class="fav-actions">
+                        <button class="btn-icon apply-fav" style="width: 100%">Apply Aesthetic</button>
+                    </div>
+                `;
+
+                item.querySelector('.delete-fav').onclick = (e) => { e.stopPropagation(); deleteFavorite(fav.id); };
+                item.querySelector('.apply-fav').onclick = () => applyAesthetic(fav);
+                
+                list.appendChild(item);
+            });
+        }
+
+        // --- EXPORTS ---
+
+        function exportCSS() {
+            const p = STATE.current.palette;
+            const f = STATE.current.fonts;
+            const css = `:root {
+  --heading-font: '${f.heading}', sans-serif;
+  --body-font: '${f.body}', sans-serif;
+  --color-1: ${p[0]};
+  --color-2: ${p[1]};
+  --color-3: ${p[2]};
+  --color-4: ${p[3]};
+  --color-5: ${p[4]};
+}`;
+            copyToClipboard(css);
+        }
+
+        function exportJSON() {
+            const data = JSON.stringify(STATE.current, null, 2);
+            copyToClipboard(data);
+        }
+
+        // --- INITIALIZATION ---
+
+        function init() {
+            // Event Listeners
+            document.getElementById('shuffle-btn').onclick = shuffle;
+            document.getElementById('save-btn').onclick = saveCurrent;
+            document.getElementById('export-css-btn').onclick = exportCSS;
+            document.getElementById('export-json-btn').onclick = exportJSON;
+            
+            const themeBtn = document.getElementById('theme-toggle');
+            themeBtn.onclick = () => {
+                STATE.theme = STATE.theme === 'light' ? 'dark' : 'light';
+                document.documentElement.className = STATE.theme === 'dark' ? 'theme-dark' : '';
+                localStorage.setItem('aesthetic.theme', STATE.theme);
+                updateThemeUI();
+            };
+
+            // Keyboard Shortcuts
+            window.onkeydown = (e) => {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    shuffle();
+                }
+                if (e.key.toLowerCase() === 's') saveCurrent();
+                if (e.key.toLowerCase() === 'c') exportCSS();
+            };
+
+            // Set Initial Theme
+            if (STATE.theme === 'dark') document.documentElement.className = 'theme-dark';
+            updateThemeUI();
+
+            // Load Defaults
+            renderFavoritesUI();
+            applyAesthetic({
+                fonts: FONT_OPTIONS[0],
+                palette: CURATED_PALETTES[0].colors
+            });
+        }
+
+        function updateThemeUI() {
+            const text = document.getElementById('theme-text');
+            const sun = document.getElementById('sun-icon');
+            if (STATE.theme === 'dark') {
+                text.textContent = "Light Mode";
+                sun.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>';
+            } else {
+                text.textContent = "Dark Mode";
+                sun.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>';
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
